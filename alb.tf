@@ -4,7 +4,7 @@ resource "aws_lb" "frontend-alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.frontend-sg.id]
-  subnets            = [aws_subnet.public-subnet-1.id]
+  subnets            = [aws_subnet.public-subnet-1.id, aws_subnet.public-subnet-2.id]
 
   enable_deletion_protection = false
 
@@ -36,7 +36,7 @@ resource "aws_lb" "backend-alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.backend-sg.id]
-  subnets            = [aws_subnet.private-subnet-1.id]
+  subnets            = [aws_subnet.private-subnet-1.id, aws_subnet.private-subnet-3.id]
 
   enable_deletion_protection = false
 
