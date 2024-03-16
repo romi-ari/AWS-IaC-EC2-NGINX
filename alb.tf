@@ -19,6 +19,38 @@ resource "aws_alb_target_group" "frontend-tg" {
   vpc_id   = aws_vpc.lab-vpc.id
 }
 
+resource "aws_lb_listener" "backend-listener" {
+  port              = 80
+  load_balancer_arn = aws_lb.backend-alb.arn
+  protocol          = "HTTP"
+
+  default_action {
+    target_group_arn = aws_alb_target_group.backend-tg.arn
+    type             = "forward"
+  }
+}
+
+resource "aws_lb" "backend-alb" {
+  name               = "backend-alb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.backend-sg.id]
+  subnets            = [aws_subnet.private-subnet-1.id]
+
+  enable_deletion_protection = true
+
+  tags = {
+    Environment = "dev/test"
+  }
+}
+
+resource "aws_alb_target_group" "backend-tg" {
+  name     = "backend-tg"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = aws_vpc.lab-vpc.id
+}
+
 resource "aws_lb_listener" "frontend-listener" {
   port              = 80
   load_balancer_arn = aws_lb.frontend-alb.arn
