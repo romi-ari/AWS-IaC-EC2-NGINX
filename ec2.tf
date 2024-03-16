@@ -69,6 +69,10 @@ resource "aws_instance" "backend-app" {
       delete_on_termination = true
     }
 
+    user_data = <<EOF
+    
+    EOF
+
     tags = {
         Name =  "backend-app"
     }

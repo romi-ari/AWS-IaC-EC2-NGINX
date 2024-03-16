@@ -5,7 +5,7 @@ resource "aws_lb" "frontend-alb" {
   security_groups    = [aws_security_group.frontend-sg.id]
   subnets            = [aws_subnet.public-subnet-1.id]
 
-  enable_deletion_protection = true
+  enable_deletion_protection = false
 
   tags = {
     Environment = "dev/test"
@@ -37,7 +37,7 @@ resource "aws_lb" "backend-alb" {
   security_groups    = [aws_security_group.backend-sg.id]
   subnets            = [aws_subnet.private-subnet-1.id]
 
-  enable_deletion_protection = true
+  enable_deletion_protection = false
 
   tags = {
     Environment = "dev/test"
