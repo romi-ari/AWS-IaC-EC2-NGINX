@@ -1,3 +1,4 @@
+# Frontend ALB
 resource "aws_lb" "frontend-alb" {
   name               = "frontend-alb"
   internal           = false
@@ -19,13 +20,13 @@ resource "aws_alb_target_group" "frontend-tg" {
   vpc_id   = aws_vpc.lab-vpc.id
 }
 
-resource "aws_lb_listener" "backend-listener" {
+resource "aws_lb_listener" "frontend-listener" {
   port              = 80
-  load_balancer_arn = aws_lb.backend-alb.arn
+  load_balancer_arn = aws_lb.frontend-alb.arn
   protocol          = "HTTP"
 
   default_action {
-    target_group_arn = aws_alb_target_group.backend-tg.arn
+    target_group_arn = aws_alb_target_group.frontend-tg.arn
     type             = "forward"
   }
 }
@@ -51,13 +52,13 @@ resource "aws_alb_target_group" "backend-tg" {
   vpc_id   = aws_vpc.lab-vpc.id
 }
 
-resource "aws_lb_listener" "frontend-listener" {
+resource "aws_lb_listener" "backend-listener" {
   port              = 80
-  load_balancer_arn = aws_lb.frontend-alb.arn
+  load_balancer_arn = aws_lb.backend-alb.arn
   protocol          = "HTTP"
 
   default_action {
-    target_group_arn = aws_alb_target_group.frontend-tg.arn
+    target_group_arn = aws_alb_target_group.backend-tg.arn
     type             = "forward"
   }
 }

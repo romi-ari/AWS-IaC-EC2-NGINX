@@ -14,7 +14,7 @@ data "aws_ami" "instance" {
   owners = ["099720109477"] # Canonical
 }
 
-# Backend app
+# Bastion host
 resource "aws_instance" "bastion-host" {
     ami                     = data.aws_ami.instance.id
     instance_type           = var.instance-type
@@ -49,6 +49,15 @@ resource "aws_instance" "frontend-app" {
       delete_on_termination = true
     }
 
+    user_data = <<EOF
+    #!/bin/bash
+    sudo apt-get update
+    sudo apt-get install -y docker.io
+    sudo systemctl start docker
+    sudo docker pull romiari/todoapp:v1.0
+    sudo docker run -d -p 8090:8090 romiari/todoapp:v1.0
+    EOF
+
     tags = {
         Name =  "frontend-app"
     }
@@ -70,7 +79,12 @@ resource "aws_instance" "backend-app" {
     }
 
     user_data = <<EOF
-    
+    #!/bin/bash
+    sudo apt-get update
+    sudo apt-get install -y docker.io
+    sudo systemctl start docker
+    sudo docker pull romiari/todoapp-api:v1.0
+    sudo docker run -d -p 3000:3000 romiari/todoapp-api:v1.0
     EOF
 
     tags = {
