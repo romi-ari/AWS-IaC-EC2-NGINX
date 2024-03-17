@@ -46,12 +46,12 @@ resource "aws_security_group" "frontend-sg" {
         cidr_blocks = ["0.0.0.0/0"]
     }
 
-    ingress {
-        from_port   = 22
-        to_port     = 22
-        protocol    = "TCP"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
+    # ingress {
+    #     from_port   = 22
+    #     to_port     = 22
+    #     protocol    = "TCP"
+    #     cidr_blocks = ["0.0.0.0/0"]
+    # }
 
     ## Outbound
     egress {
@@ -146,6 +146,16 @@ resource "aws_security_group" "rds-sg" {
     tags = {
         Name = "rds-sg"
     }
+}
+
+# Update frontend-sg ingress to allow access from bastion-sg
+resource "aws_security_group_rule" "frontend-to-bastion" {
+    type                        = "ingress"
+    from_port                   = 22
+    to_port                     = 22
+    protocol                    = "TCP"
+    security_group_id           = aws_security_group.frontend-sg.id
+    source_security_group_id    = aws_security_group.bastion-sg.id
 }
 
 # Update backend-sg ingress to allow access from rds-sg
