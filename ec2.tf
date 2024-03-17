@@ -16,12 +16,13 @@ data "aws_ami" "instance" {
 
 # Bastion host
 resource "aws_instance" "bastion-host" {
-    ami                     = data.aws_ami.instance.id
-    instance_type           = var.instance-type
-    key_name                = "vockey"
-    availability_zone       = var.az-1a
-    vpc_security_group_ids  = [aws_security_group.bastion-sg.id]
-    subnet_id               = aws_subnet.public-subnet-1.id
+    ami                         = data.aws_ami.instance.id
+    instance_type               = var.instance-type
+    key_name                    = "vockey"
+    availability_zone           = var.az-1a
+    associate_public_ip_address = true
+    vpc_security_group_ids      = [aws_security_group.bastion-sg.id]
+    subnet_id                   = aws_subnet.public-subnet-1.id
     
     root_block_device {
       volume_type           = "gp3"
@@ -42,21 +43,16 @@ resource "aws_instance" "frontend-app" {
     availability_zone       = var.az-1a
     vpc_security_group_ids  = [aws_security_group.frontend-sg.id]
     subnet_id               = aws_subnet.public-subnet-1.id
+
+    associate_public_ip_address = true
     
     root_block_device {
       volume_type           = "gp3"
-      volume_size           = "8"
+      volume_size           = "20"
       delete_on_termination = true
     }
 
-    user_data = <<EOF
-    #!/bin/bash
-    sudo apt-get update
-    sudo apt-get install -y docker.io
-    sudo systemctl start docker
-    sudo docker pull romiari/todoapp:v1.0
-    sudo docker run -d -p 8090:8090 romiari/todoapp:v1.0
-    EOF
+    user_data = file("user-data/frontend-ec2.sh")
 
     tags = {
         Name =  "frontend-app"
@@ -74,18 +70,11 @@ resource "aws_instance" "backend-app" {
     
     root_block_device {
       volume_type           = "gp3"
-      volume_size           = "8"
+      volume_size           = "20"
       delete_on_termination = true
     }
 
-    user_data = <<EOF
-    #!/bin/bash
-    sudo apt-get update
-    sudo apt-get install -y docker.io
-    sudo systemctl start docker
-    sudo docker pull romiari/todoapp-api:v1.0
-    sudo docker run -d -p 3000:3000 romiari/todoapp-api:v1.0
-    EOF
+    user_data = file("user-data/backend-ec2.sh")
 
     tags = {
         Name =  "backend-app"

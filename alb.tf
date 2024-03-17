@@ -20,6 +20,12 @@ resource "aws_alb_target_group" "frontend-tg" {
   vpc_id   = aws_vpc.lab-vpc.id
 }
 
+resource "aws_lb_target_group_attachment" "attach-frontend-tg" {
+  target_group_arn = aws_alb_target_group.frontend-tg.arn
+  target_id        = aws_instance.frontend-app.id
+  port             = 80
+}
+
 resource "aws_lb_listener" "frontend-listener" {
   port              = 80
   load_balancer_arn = aws_lb.frontend-alb.arn
@@ -33,7 +39,7 @@ resource "aws_lb_listener" "frontend-listener" {
 
 resource "aws_lb" "backend-alb" {
   name               = "backend-alb"
-  internal           = false
+  internal           = true
   load_balancer_type = "application"
   security_groups    = [aws_security_group.backend-sg.id]
   subnets            = [aws_subnet.private-subnet-1.id, aws_subnet.private-subnet-3.id]
@@ -50,6 +56,12 @@ resource "aws_alb_target_group" "backend-tg" {
   port     = 80
   protocol = "HTTP"
   vpc_id   = aws_vpc.lab-vpc.id
+}
+
+resource "aws_lb_target_group_attachment" "attach-backend-tg" {
+  target_group_arn = aws_alb_target_group.backend-tg.arn
+  target_id        = aws_instance.backend-app.id
+  port             = 80
 }
 
 resource "aws_lb_listener" "backend-listener" {

@@ -81,6 +81,13 @@ resource "aws_security_group" "backend-sg" {
     }
 
     ingress {
+        from_port   = 22
+        to_port     = 22
+        protocol    = "TCP"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    ingress {
         from_port   = 0
         to_port     = 0
         protocol    = "ICMP"
@@ -152,7 +159,7 @@ resource "aws_security_group_rule" "backend-to-rds" {
 }
 
 # Update backend-sg ingress to allow access from bastion-sg
-resource "aws_security_group_rule" "backend_to_bastion" {
+resource "aws_security_group_rule" "backend-to-bastion" {
     type                        = "ingress"
     from_port                   = 22
     to_port                     = 22

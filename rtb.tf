@@ -13,7 +13,7 @@ resource "aws_route_table" "rtb-public" {
 }
 
 # Route table for private subnet 1
-resource "aws_route_table" "rtb-private-1" {
+resource "aws_route_table" "rtb-private" {
     vpc_id = aws_vpc.lab-vpc.id
 
     route {
@@ -22,24 +22,35 @@ resource "aws_route_table" "rtb-private-1" {
     }
 
     tags = {
-        Name = "rtb-private-1"
+        Name = "rtb-private"
     }
 }
 
 # Route table association for public subnet 1
-resource "aws_route_table_association" "rtb-public-association" {
+resource "aws_route_table_association" "rtb-public1-association" {
     route_table_id  = aws_route_table.rtb-public.id
     subnet_id       = aws_subnet.public-subnet-1.id
 }
 
+resource "aws_route_table_association" "rtb-public2-association" {
+    route_table_id  = aws_route_table.rtb-public.id
+    subnet_id       = aws_subnet.public-subnet-2.id
+}
+
 # Route table association for private subnet 1
 resource "aws_route_table_association" "rtb-private-1-association" {
-    route_table_id  = aws_route_table.rtb-private-1.id
+    route_table_id  = aws_route_table.rtb-private.id
     subnet_id       = aws_subnet.private-subnet-1.id
 }
 
 # Route table association for private subnet 2
 resource "aws_route_table_association" "rtb-private-2-association" {
-    route_table_id  = aws_route_table.rtb-private-1.id
+    route_table_id  = aws_route_table.rtb-private.id
     subnet_id       = aws_subnet.private-subnet-2.id
+}
+
+# Route table association for private subnet 3
+resource "aws_route_table_association" "rtb-private-3-association" {
+    route_table_id  = aws_route_table.rtb-private.id
+    subnet_id       = aws_subnet.private-subnet-3.id
 }
