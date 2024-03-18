@@ -10,7 +10,7 @@ resource "aws_db_subnet_group" "private-subnet-group" {
 resource "aws_db_instance" "dbpostgres" {
     allocated_storage       = 80
     storage_type            = "gp3"
-    db_name                 = "dbpostgres"
+    db_name                 = "todoapp"
     engine                  = "postgres"
     engine_version          = "16.1"
     instance_class          = "db.t3.micro"
