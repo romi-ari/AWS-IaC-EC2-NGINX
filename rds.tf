@@ -8,6 +8,7 @@ resource "aws_db_subnet_group" "private-subnet-group" {
 }
 
 resource "aws_db_instance" "dbpostgres" {
+    identifier              = "mytodoapp-202403194" 
     allocated_storage       = 80
     storage_type            = "gp3"
     db_name                 = "todoapp"
