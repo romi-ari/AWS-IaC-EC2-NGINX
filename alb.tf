@@ -18,6 +18,14 @@ resource "aws_alb_target_group" "frontend-tg" {
   port     = 3000
   protocol = "HTTP"
   vpc_id   = aws_vpc.lab-vpc.id
+
+  health_check {
+    path                = "/"
+    healthy_threshold   = 5
+    unhealthy_threshold = 5
+    interval            = 10
+
+  }
 }
 
 resource "aws_lb_target_group_attachment" "attach-frontend-tg" {
@@ -58,7 +66,11 @@ resource "aws_alb_target_group" "backend-tg" {
   vpc_id   = aws_vpc.lab-vpc.id
 
   health_check {
-    path = "/api/todos"
+    path                = "/api/todos"
+    healthy_threshold   = 5
+    unhealthy_threshold = 5
+    interval            = 10
+    
   }
 }
 
