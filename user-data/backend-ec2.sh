@@ -13,8 +13,7 @@ echo \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update -y
 
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-sudo apt-get install -y postgresql-client-14
-sudo systemctl start docker
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin postgresql-client-14 nginx
+sudo systemctl start docker nginx
+sudo apt install -y certbot python3-certbot-nginx
 sudo docker run -d -p 8090:8090 romiari/todoapp-api:v2.0

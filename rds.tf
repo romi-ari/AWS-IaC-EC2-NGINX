@@ -1,6 +1,6 @@
 resource "aws_db_subnet_group" "private-subnet-group" {
     name        = "main"
-    subnet_ids  = flatten([aws_subnet.private-subnet-2.id, aws_subnet.private-subnet-3.id])
+    subnet_ids  = flatten([aws_subnet.private-subnet-1.id, aws_subnet.private-subnet-2.id])
 
     tags = {
         Name = "private-subnet-group"

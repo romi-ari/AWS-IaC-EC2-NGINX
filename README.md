@@ -1,1 +1,1 @@
-![Alt text](diagram.png)
+<!-- ![Alt text](diagram.png) -->
